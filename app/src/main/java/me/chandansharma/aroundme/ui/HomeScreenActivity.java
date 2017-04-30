@@ -50,7 +50,7 @@ public class HomeScreenActivity extends AppCompatActivity implements
         buildGoogleApiClient();
 
         itemString = getResources().getStringArray(R.array.input);
-        mHomeScreenItemListAdapter = new HomeScreenItemListAdapter(this, itemString, mCurrentLocation);
+        mHomeScreenItemListAdapter = new HomeScreenItemListAdapter(this, itemString);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(mGridLayoutManager);

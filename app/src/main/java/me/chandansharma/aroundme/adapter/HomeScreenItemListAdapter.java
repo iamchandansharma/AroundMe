@@ -21,12 +21,10 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
     //Context of the activity
     private Context mContext;
     private String [] mPlacesListTag;
-    private String mCurrentLocation;
 
-    public HomeScreenItemListAdapter(Context context, String [] placesListTag, String currentLocation){
+    public HomeScreenItemListAdapter(Context context, String [] placesListTag){
         mContext = context;
         mPlacesListTag = placesListTag;
-        mCurrentLocation = currentLocation;
     }
 
     @Override
@@ -74,7 +72,6 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
              */
             Intent placeTagIntent = new Intent(mContext, PlaceListActivity.class);
             placeTagIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, locationTag);
-            placeTagIntent.putExtra(GoogleApiUrl.LOCATION_EXTRA_TEXT,mCurrentLocation);
             mContext.startActivity(placeTagIntent);
         }
     }
