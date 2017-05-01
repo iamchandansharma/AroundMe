@@ -46,11 +46,11 @@ public class PlaceListActivity extends AppCompatActivity {
          */
         String locationTag = getIntent().getStringExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT);
         String currentLocation = getPreferences(Context.MODE_PRIVATE).getString(
-                GoogleApiUrl.CURRENT_LOCATION_DATA_KEY,null);
+                GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
 
         String locationQueryStringUrl = GoogleApiUrl.BASE_URL + GoogleApiUrl.NEARBY_SEARCH_TAG + "/" +
                 GoogleApiUrl.JSON_FORMAT_TAG + "?" + GoogleApiUrl.LOCATION_TAG + "=" +
-                currentLocation + "&" + GoogleApiUrl.RADIUS_TAG + "=" +
+                "20.609803,72.938786" + "&" + GoogleApiUrl.RADIUS_TAG + "=" +
                 GoogleApiUrl.RADIUS_VALUE + "&" + GoogleApiUrl.PLACE_TYPE_TAG + "=" + locationTag +
                 "&" + GoogleApiUrl.API_KEY_TAG + "=" + GoogleApiUrl.API_KEY;
 
@@ -59,7 +59,7 @@ public class PlaceListActivity extends AppCompatActivity {
         getNearByPlaceDetails(locationQueryStringUrl);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.place_list_recycler_view);
-        mGridLayoutManager = new GridLayoutManager(this,1);
+        mGridLayoutManager = new GridLayoutManager(this, 1);
         mPlaceListAdapter = new PlaceListAdapter(this, mNearByPlaceArrayList);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mPlaceListAdapter);
@@ -68,37 +68,53 @@ public class PlaceListActivity extends AppCompatActivity {
     private void getNearByPlaceDetails(String locationQueryStringUrl) {
         //Tag to cancel request
         String jsonArrayTag = "jsonArrayTag";
-        JsonObjectRequest placeJsonObject = new JsonObjectRequest(Request.Method.GET,
+        JsonObjectRequest placeJsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 locationQueryStringUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //to check if the next page token is available or not for more places
-                        String nextPageToken = "";
-                        if (response.has("next_page_token")) {
-                            try {
-                                nextPageToken = response.getString("next_page_token");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
                         try {
                             JSONArray rootJsonArray = response.getJSONArray("results");
                             for (int i = 0; i < rootJsonArray.length(); i++) {
                                 JSONObject singlePlaceJsonObject = (JSONObject) rootJsonArray.get(i);
+
+                                String currentPlaceId = singlePlaceJsonObject.getString("place_id");
+                                Double currentPlaceLatitude = singlePlaceJsonObject
+                                        .getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lat");
+                                Double currentPlaceLongitude = singlePlaceJsonObject
+                                        .getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lng");
+                                String currentPlaceName = singlePlaceJsonObject.getString("name");
+                                String currentPlaceOpeningHourStatus = singlePlaceJsonObject
+                                        .has("opening_hours") ? singlePlaceJsonObject
+                                        .getJSONObject("opening_hours")
+                                        .getString("open_now") : "Status Not Available";
+                                Double currentPlaceRating = singlePlaceJsonObject.has("rating") ?
+                                        singlePlaceJsonObject.getDouble("rating") : 0;
+                                String currentPlaceAddress = singlePlaceJsonObject.has("vicinity") ?
+                                        singlePlaceJsonObject.getString("vicinity") :
+                                        "Address Not Available";
                                 Place singlePlaceDetail = new Place(
-                                        singlePlaceJsonObject.getString("place_id"),
-                                        singlePlaceJsonObject.getJSONObject("geometry")
-                                                .getJSONObject("location").getDouble("lat"),
-                                        singlePlaceJsonObject.getJSONObject("geometry")
-                                                .getJSONObject("location").getDouble("lng"),
-                                        singlePlaceJsonObject.getString("name"),
-                                        singlePlaceJsonObject.getJSONObject("opening_hours")
-                                                .getBoolean("open_now"),
-                                        singlePlaceJsonObject.getDouble("rating"),
-                                        singlePlaceJsonObject.getString("vicinity"),
-                                        nextPageToken);
+                                        currentPlaceId,
+                                        currentPlaceLatitude,
+                                        currentPlaceLongitude,
+                                        currentPlaceName,
+                                        currentPlaceOpeningHourStatus,
+                                        currentPlaceRating,
+                                        currentPlaceAddress);
                                 mNearByPlaceArrayList.add(singlePlaceDetail);
+                            }
+                            //to check if the next page token is available or not for more places
+                            if (response.has("next_page_token")) {
+                                String nextPageToken = response.getString("next_page_token");
+                                String locationQueryStringUrl = GoogleApiUrl.BASE_URL +
+                                        GoogleApiUrl.NEARBY_SEARCH_TAG + "/" +
+                                        GoogleApiUrl.JSON_FORMAT_TAG + "?" +
+                                        GoogleApiUrl.NEXT_PAGE_TOKEN_TAG + "=" + nextPageToken +
+                                        "&" + GoogleApiUrl.API_KEY_TAG + "=" + GoogleApiUrl.API_KEY;
+                                Log.d(TAG,locationQueryStringUrl);
+                                getNearByPlaceDetails(locationQueryStringUrl);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -113,7 +129,8 @@ public class PlaceListActivity extends AppCompatActivity {
                     }
                 });
 
+        //retrying after timeout
         //Adding request to request queue
-        AppController.getInstance().addToRequestQueue(placeJsonObject, jsonArrayTag);
+        AppController.getInstance().addToRequestQueue(placeJsonObjectRequest, jsonArrayTag);
     }
 }

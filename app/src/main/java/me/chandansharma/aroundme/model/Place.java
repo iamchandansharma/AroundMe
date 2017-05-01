@@ -10,38 +10,40 @@ public class Place {
      * All Reference Variable
      */
     private String mPlaceId;
-    private Double mLatitude;
-    private Double mLongitude;
+    private Double mPlaceLatitude;
+    private Double mPlaceLongitude;
     private String mPlaceName;
-    private boolean mPlaceOpeningHourStatus;
+    private String mPlaceOpeningHourStatus;
     private Double mPlaceRating;
     private String mPlaceAddress;
-    private String mNextPageToken;
 
     /**
-     *
-     * @param mPlaceId Place Id
-     * @param mLatitude Place Latitude
-     * @param mLongitude Place Longitude
-     * @param mPlaceName Place Name
+     * @param mPlaceId                Place Id
+     * @param mPlaceLatitude          Place Latitude
+     * @param mPlaceLongitude         Place Longitude
+     * @param mPlaceName              Place Name
      * @param mPlaceOpeningHourStatus Place Opening Status Weather it is Open or Close
-     * @param mPlaceRating Place rating example 4.5
-     * @param mPlaceAddress Place Address
-     * @param mNextPageToken Next page token for more places
+     * @param mPlaceRating            Place rating example 4.5
+     * @param mPlaceAddress           Place Address
      */
-    public Place(String mPlaceId, Double mLatitude, Double mLongitude,
-                 String mPlaceName, boolean mPlaceOpeningHourStatus,
-                 Double mPlaceRating, String mPlaceAddress,
-                 String mNextPageToken){
+
+    public Place(String mPlaceId, Double mPlaceLatitude, Double mPlaceLongitude,
+                 String mPlaceName, String mPlaceOpeningHourStatus,
+                 Double mPlaceRating, String mPlaceAddress) {
 
         this.mPlaceId = mPlaceId;
-        this.mLatitude = mLatitude;
-        this.mLongitude = mLongitude;
+        this.mPlaceLatitude = mPlaceLatitude;
+        this.mPlaceLongitude = mPlaceLongitude;
         this.mPlaceName = mPlaceName;
         this.mPlaceOpeningHourStatus = mPlaceOpeningHourStatus;
         this.mPlaceRating = mPlaceRating;
         this.mPlaceAddress = mPlaceAddress;
-        this.mNextPageToken = mNextPageToken;
+    }
+
+    public Place(String mPlaceId, Double mPlaceLatitude, Double mPlaceLongitude){
+        this.mPlaceId = mPlaceId;
+        this.mPlaceLatitude = mPlaceLatitude;
+        this.mPlaceLongitude = mPlaceLongitude;
     }
 
     public String getPlaceId() {
@@ -52,20 +54,20 @@ public class Place {
         mPlaceId = placeId;
     }
 
-    public Double getLatitude() {
-        return mLatitude;
+    public Double getPlaceLatitude() {
+        return mPlaceLatitude;
     }
 
-    public void setLatitude(Double latitude) {
-        mLatitude = latitude;
+    public void setPlaceLatitude(Double placeLatitude) {
+        mPlaceLatitude = placeLatitude;
     }
 
-    public Double getLongitude() {
-        return mLongitude;
+    public Double getPlaceLongitude() {
+        return mPlaceLongitude;
     }
 
-    public void setLongitude(Double longitude) {
-        mLongitude = longitude;
+    public void setPlaceLongitude(Double placeLongitude) {
+        mPlaceLongitude = placeLongitude;
     }
 
     public String getPlaceName() {
@@ -76,11 +78,11 @@ public class Place {
         mPlaceName = placeName;
     }
 
-    public boolean isPlaceOpeningHourStatus() {
+    public String getPlaceOpeningHourStatus() {
         return mPlaceOpeningHourStatus;
     }
 
-    public void setPlaceOpeningHourStatus(boolean placeOpeningHourStatus) {
+    public void setPlaceOpeningHourStatus(String placeOpeningHourStatus) {
         mPlaceOpeningHourStatus = placeOpeningHourStatus;
     }
 
@@ -100,11 +102,4 @@ public class Place {
         mPlaceAddress = placeAddress;
     }
 
-    public String getNextPageToken() {
-        return mNextPageToken;
-    }
-
-    public void setNextPageToken(String nextPageToken) {
-        mNextPageToken = nextPageToken;
-    }
 }

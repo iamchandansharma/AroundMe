@@ -33,7 +33,7 @@ public class HomeScreenActivity extends AppCompatActivity implements
     //View Reference Variable
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mCurrentLocationRequest;
-    private String mCurrentLocation;
+    private String mCurrentLocation = "";
     private RecyclerView mRecyclerView;
     private GridLayoutManager mGridLayoutManager;
     private HomeScreenItemListAdapter mHomeScreenItemListAdapter;
@@ -113,12 +113,19 @@ public class HomeScreenActivity extends AppCompatActivity implements
                     + "," +
                     String.valueOf(
                             LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude());
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient,
+                    mCurrentLocationRequest,
+                    this);
         } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient,
                     mCurrentLocationRequest,
                     this);
+            Log.e(TAG, "onConnected: location Updates");
         }
+        Log.d(TAG, "After Connected" + mCurrentLocation);
+
         Log.d(TAG, "After Connected");
     }
 
@@ -145,3 +152,5 @@ public class HomeScreenActivity extends AppCompatActivity implements
         Log.d(TAG, "onLocationChange");
     }
 }
+
+

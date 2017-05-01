@@ -34,6 +34,8 @@
         </activity>
         <activity android:name=".ui.PlaceDetailActivity">
         </activity>
+        <activity android:name=".ui.PlaceListOnMapActivity">
+        </activity>
     </application>
 
 </manifest>

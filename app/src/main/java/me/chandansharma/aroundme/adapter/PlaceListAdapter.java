@@ -69,8 +69,13 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             mPlaceNameTextView.setText(mNearByPlaceArrayList.get(mItemPosition).getPlaceName());
             mPlaceAddressTextView.setText(mNearByPlaceArrayList.get(mItemPosition).getPlaceAddress());
-            mPlaceOpenStatusTextView.setText(mNearByPlaceArrayList
-                    .get(mItemPosition).isPlaceOpeningHourStatus() ? "Open Now" : "Closed");
+            if(mNearByPlaceArrayList.get(mItemPosition).getPlaceOpeningHourStatus().equals("true"))
+                mPlaceOpenStatusTextView.setText("Open Now");
+            else if(mNearByPlaceArrayList.get(mItemPosition).getPlaceOpeningHourStatus().equals("false"))
+                mPlaceOpenStatusTextView.setText("Closed");
+            else
+                mPlaceOpenStatusTextView.setText(mNearByPlaceArrayList.get(mItemPosition)
+                        .getPlaceOpeningHourStatus());
             mPlaceRatingTextView.setText(String.valueOf(mNearByPlaceArrayList.get(mItemPosition)
                     .getPlaceRating()));
         }

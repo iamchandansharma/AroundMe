@@ -15,8 +15,9 @@ public class GoogleApiUrl {
     public static final String JSON_FORMAT_TAG = "json";
     public static final String LOCATION_TAG = "location";
     public static final String RADIUS_TAG = "radius";
-    public static final String RADIUS_VALUE ="2000";
+    public static final String RADIUS_VALUE ="3000";
     public static final String PLACE_TYPE_TAG = "type";
+    public static final String NEXT_PAGE_TOKEN_TAG = "pagetoken";
     public static final String API_KEY_TAG = "key";
     public static final String API_KEY= "AIzaSyBQ4LeIgtd80EGFzjLnsLf8qWVO8Jyii_k";
 

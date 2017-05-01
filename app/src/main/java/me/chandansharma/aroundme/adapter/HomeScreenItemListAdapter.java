@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import me.chandansharma.aroundme.R;
-import me.chandansharma.aroundme.ui.PlaceListActivity;
+import me.chandansharma.aroundme.ui.PlaceListOnMapActivity;
 import me.chandansharma.aroundme.utils.GoogleApiUrl;
 
 /**
@@ -70,7 +70,7 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
             /**
              * Intent to start Place list activity with locationTag as extra data.
              */
-            Intent placeTagIntent = new Intent(mContext, PlaceListActivity.class);
+            Intent placeTagIntent = new Intent(mContext, PlaceListOnMapActivity.class);
             placeTagIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, locationTag);
             mContext.startActivity(placeTagIntent);
         }

@@ -91,4 +91,8 @@
     <string name="university">University</string>
     <string name="veterinary_care">Veterinary_Care</string>
     <string name="zoo">Zoo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_place_list_on_map">PlaceListOnMap</string>
 </resources>
