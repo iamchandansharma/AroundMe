@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -48,6 +50,14 @@ public class HomeScreenActivity extends AppCompatActivity implements
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
+
+        Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(actionBar);
+        setTitle(R.string.app_name);
+        actionBar.setTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        //actionBar.setNavigationIcon(R.drawable.ic_sort_white_24dp);
 
         itemString = getResources().getStringArray(R.array.input);
         mHomeScreenItemListAdapter = new HomeScreenItemListAdapter(this, itemString);

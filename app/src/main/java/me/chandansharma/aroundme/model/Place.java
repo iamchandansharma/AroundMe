@@ -1,10 +1,13 @@
 package me.chandansharma.aroundme.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by iamcs on 2017-04-29.
  */
 
-public class Place {
+public class Place implements Parcelable {
 
     /**
      * All Reference Variable
@@ -16,6 +19,9 @@ public class Place {
     private String mPlaceOpeningHourStatus;
     private Double mPlaceRating;
     private String mPlaceAddress;
+    private String mPlacePhoneNumber;
+    private String mPlaceWebsite;
+    private String mPlaceShareLink;
 
     /**
      * @param mPlaceId                Place Id
@@ -40,7 +46,36 @@ public class Place {
         this.mPlaceAddress = mPlaceAddress;
     }
 
-    public Place(String mPlaceId, Double mPlaceLatitude, Double mPlaceLongitude){
+    /**
+     * @param mPlaceId                Place Id
+     * @param mPlaceLatitude          Place Latitude
+     * @param mPlaceLongitude         Place Longitude
+     * @param mPlaceName              Place Name
+     * @param mPlaceAddress           Place Address
+     * @param mPlacePhoneNumber       Place Phone number
+     * @param mPlaceOpeningHourStatus Place open status
+     * @param mPlaceWebsite           Place Website
+     * @param mPlaceShareLink         Place Sharing link to direct Social Media ex WhatsApp
+     */
+    public Place(String mPlaceId, Double mPlaceLatitude, Double mPlaceLongitude,
+                 String mPlaceName, String mPlaceOpeningHourStatus,
+                 Double mPlaceRating, String mPlaceAddress,
+                 String mPlacePhoneNumber, String mPlaceWebsite,
+                 String mPlaceShareLink) {
+
+        this.mPlaceId = mPlaceId;
+        this.mPlaceLatitude = mPlaceLatitude;
+        this.mPlaceLongitude = mPlaceLongitude;
+        this.mPlaceName = mPlaceName;
+        this.mPlaceRating = mPlaceRating;
+        this.mPlaceAddress = mPlaceAddress;
+        this.mPlaceOpeningHourStatus = mPlaceOpeningHourStatus;
+        this.mPlacePhoneNumber = mPlacePhoneNumber;
+        this.mPlaceWebsite = mPlaceWebsite;
+        this.mPlaceShareLink = mPlaceShareLink;
+    }
+
+    public Place(String mPlaceId, Double mPlaceLatitude, Double mPlaceLongitude) {
         this.mPlaceId = mPlaceId;
         this.mPlaceLatitude = mPlaceLatitude;
         this.mPlaceLongitude = mPlaceLongitude;
@@ -102,4 +137,76 @@ public class Place {
         mPlaceAddress = placeAddress;
     }
 
+    public String getPlacePhoneNumber() {
+        return mPlacePhoneNumber;
+    }
+
+    public void setPlacePhoneNumber(String placePhoneNumber) {
+        mPlacePhoneNumber = placePhoneNumber;
+    }
+
+    public String getPlaceWebsite() {
+        return mPlaceWebsite;
+    }
+
+    public void setPlaceWebsite(String placeWebsite) {
+        mPlaceWebsite = placeWebsite;
+    }
+
+    public String getPlaceShareLink() {
+        return mPlaceShareLink;
+    }
+
+    public void setPlaceShareLink(String placeShareLink) {
+        mPlaceShareLink = placeShareLink;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>() {
+
+        @Override
+        public Place createFromParcel(Parcel source) {
+            return new Place(source);
+        }
+
+        @Override
+        public Place[] newArray(int size) {
+            return new Place[size];
+        }
+    };
+
+    /**
+     * Storing the Place data to Parcel object
+     **/
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mPlaceId);
+        dest.writeDouble(mPlaceLatitude);
+        dest.writeDouble(mPlaceLongitude);
+        dest.writeString(mPlaceName);
+        dest.writeString(mPlaceOpeningHourStatus);
+        dest.writeDouble(mPlaceRating);
+        dest.writeString(mPlaceAddress);
+    }
+
+    /**
+     * Retrieving Place data from Parcel object
+     * This constructor is invoked by the method createFromParcel(Parcel source) of
+     * the object CREATOR
+     **/
+
+    private Place(Parcel in) {
+        this.mPlaceId = in.readString();
+        this.mPlaceLatitude = in.readDouble();
+        this.mPlaceLongitude = in.readDouble();
+        this.mPlaceName = in.readString();
+        this.mPlaceOpeningHourStatus = in.readString();
+        this.mPlaceRating = in.readDouble();
+        this.mPlaceAddress = in.readString();
+    }
 }

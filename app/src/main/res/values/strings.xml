@@ -95,4 +95,20 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_place_list_on_map">PlaceListOnMap</string>
+    <string name="small_location_icon">Small Location Icon</string>
+    <string name="small_call_icon">Small Call Icon</string>
+    <string name="small_website_icon">Small Website Icon</string>
+    <string name="small_location_status_icon">Small Location Status Icon</string>
+    <string name="no_review_found">No Review Found</string>
+    <string name="location_icon">Location Icon</string>
+    <string name="place_list_icon">Place List Icon</string>
+    <string name="near_by_tag">Near By </string>
+    <string name="no_near_by_tag">No Near By</string>
+    <string name="no_near_by_place_found">No Near By Place Found</string>
+    <string name="favourite_icon">Favourite Icon</string>
+    <string name="website_icon">Website Icon</string>
+    <string name="phone_icon">Phone Icon</string>
+    <string name="call">CALL</string>
+    <string name="website">WEBSITE</string>
+    <string name="favourite">FAVOURITE</string>
 </resources>

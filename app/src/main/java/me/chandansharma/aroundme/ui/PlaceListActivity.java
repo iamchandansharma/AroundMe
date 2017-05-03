@@ -2,10 +2,14 @@ package me.chandansharma.aroundme.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -55,14 +59,41 @@ public class PlaceListActivity extends AppCompatActivity {
                 "&" + GoogleApiUrl.API_KEY_TAG + "=" + GoogleApiUrl.API_KEY;
 
         Log.d(TAG, locationQueryStringUrl);
-        //Method to required all details about place
-        getNearByPlaceDetails(locationQueryStringUrl);
 
+        Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(actionBar);
+        String actionBarTitleText = getResources().getString(R.string.near_by_tag) +
+                " " + locationTag.replace('_', ' ') + " List";
+        setTitle(actionBarTitleText);
+        actionBar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Method to required all details about place
+        //getNearByPlaceDetails(locationQueryStringUrl);
+        mNearByPlaceArrayList = getIntent().getParcelableArrayListExtra("Mydata");
         mRecyclerView = (RecyclerView) findViewById(R.id.place_list_recycler_view);
-        mGridLayoutManager = new GridLayoutManager(this, 1);
-        mPlaceListAdapter = new PlaceListAdapter(this, mNearByPlaceArrayList);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mRecyclerView.setAdapter(mPlaceListAdapter);
+
+        if (mNearByPlaceArrayList.size() == 0) {
+            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.empty_view).setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mGridLayoutManager = new GridLayoutManager(this, 1);
+            mPlaceListAdapter = new PlaceListAdapter(this, mNearByPlaceArrayList);
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            mRecyclerView.setAdapter(mPlaceListAdapter);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void getNearByPlaceDetails(String locationQueryStringUrl) {
@@ -113,7 +144,7 @@ public class PlaceListActivity extends AppCompatActivity {
                                         GoogleApiUrl.JSON_FORMAT_TAG + "?" +
                                         GoogleApiUrl.NEXT_PAGE_TOKEN_TAG + "=" + nextPageToken +
                                         "&" + GoogleApiUrl.API_KEY_TAG + "=" + GoogleApiUrl.API_KEY;
-                                Log.d(TAG,locationQueryStringUrl);
+                                Log.d(TAG, locationQueryStringUrl);
                                 getNearByPlaceDetails(locationQueryStringUrl);
                             }
                         } catch (JSONException e) {
