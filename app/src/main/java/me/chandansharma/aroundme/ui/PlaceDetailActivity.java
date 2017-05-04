@@ -1,5 +1,6 @@
 package me.chandansharma.aroundme.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.Request;
@@ -40,6 +42,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     private ArrayList<PlaceUserRating> mPlaceUserRatingsArrayList = new ArrayList<>();
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private String mPlaceShareUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(actionBar);
         setTitle(R.string.app_name);
-        actionBar.setTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
+        actionBar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -66,16 +69,29 @@ public class PlaceDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home :
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 finish();
+                break;
+            case R.id.share_icon:
+                Intent sharePlaceUrlIntent = new Intent(Intent.ACTION_SEND);
+                sharePlaceUrlIntent.setType("text/plain");
+                sharePlaceUrlIntent.putExtra(Intent.EXTRA_TEXT, mPlaceShareUrl);
+                startActivity(sharePlaceUrlIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void getCurrentPlaceAllDetails(String currentPlaceDetailUrl) {
+
+    private void getCurrentPlaceAllDetails(final String currentPlaceDetailUrl) {
         String jsonArrayTag = "jsonArrayTag";
         JsonObjectRequest placeJsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 currentPlaceDetailUrl, null,
@@ -110,6 +126,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                                     rootJsonObject.getString("website") :
                                     "Website Not Registered";
                             String currentPlaceShareLink = rootJsonObject.getString("url");
+                            mPlaceShareUrl = currentPlaceDetailUrl;
 
                             Place currentPlaceDetail = new Place(
                                     currentPlaceId,
@@ -211,9 +228,11 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position){
-                case 0 : return "ABOUT";
-                case 1: return  "REVIEW";
+            switch (position) {
+                case 0:
+                    return "ABOUT";
+                case 1:
+                    return "REVIEW";
             }
             return null;
         }

@@ -15,7 +15,7 @@ public class PlaceUserRating implements Parcelable{
      */
     private String mAuthorName;
     private String mAuthorProfilePictureUrl;
-    private Double mPlaceRating;
+    private Double mAuthorPlaceRating;
     private String mPlaceRatingRelativeTimeDescription;
     private String mAuthorReviewText;
 
@@ -33,7 +33,7 @@ public class PlaceUserRating implements Parcelable{
                            String mAuthorReviewText){
         this.mAuthorName = mAuthorName;
         this.mAuthorProfilePictureUrl = mAuthorProfilePictureUrl;
-        this.mPlaceRating = mPlaceRating;
+        this.mAuthorPlaceRating = mPlaceRating;
         this.mPlaceRatingRelativeTimeDescription = mPlaceRatingRelativeTimeDescription;
         this.mAuthorReviewText = mAuthorReviewText;
     }
@@ -54,12 +54,12 @@ public class PlaceUserRating implements Parcelable{
         mAuthorProfilePictureUrl = authorProfilePictureUrl;
     }
 
-    public Double getPlaceRating() {
-        return mPlaceRating;
+    public Double getAuthorPlaceRating() {
+        return mAuthorPlaceRating;
     }
 
-    public void setPlaceRating(Double placeRating) {
-        mPlaceRating = placeRating;
+    public void setAuthorPlaceRating(Double authorPlaceRating) {
+        mAuthorPlaceRating = authorPlaceRating;
     }
 
     public String getPlaceRatingRelativeTimeDescription() {
@@ -104,7 +104,7 @@ public class PlaceUserRating implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mAuthorName);
         dest.writeString(mAuthorProfilePictureUrl);
-        dest.writeDouble(mPlaceRating);
+        dest.writeDouble(mAuthorPlaceRating);
         dest.writeString(mPlaceRatingRelativeTimeDescription);
         dest.writeString(mAuthorReviewText);
     }
@@ -117,7 +117,7 @@ public class PlaceUserRating implements Parcelable{
     private PlaceUserRating(Parcel in){
         this.mAuthorName = in.readString();
         this.mAuthorProfilePictureUrl = in.readString();
-        this.mPlaceRating = in.readDouble();
+        this.mAuthorPlaceRating = in.readDouble();
         this.mPlaceRatingRelativeTimeDescription = in.readString();
         this.mAuthorReviewText = in.readString();
     }

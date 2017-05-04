@@ -79,25 +79,28 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                 " " + mLocationTag.replace('_', ' ') + " List";
         setTitle(actionBarTitleText);
         actionBar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ((TextView)findViewById(R.id.place_list_placeholder_text_view))
-                .setText(getResources().getString(R.string.near_by_tag) + " "+ mLocationTag + " List");
+        ((TextView) findViewById(R.id.place_list_placeholder_text_view))
+                .setText(getResources().getString(R.string.near_by_tag) + " " + mLocationTag + " List");
 
         findViewById(R.id.place_list_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent placeDetailTransferIntent = new Intent(PlaceListOnMapActivity.this, PlaceListActivity.class);
-                placeDetailTransferIntent.putParcelableArrayListExtra("Mydata", mNearByPlaceArrayList);
-                placeDetailTransferIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, mLocationTag);
+                Intent placeDetailTransferIntent = new Intent(PlaceListOnMapActivity.this, FavouritePlaceListActivity.class);
+                //placeDetailTransferIntent.putParcelableArrayListExtra("Mydata", mNearByPlaceArrayList);
+                //placeDetailTransferIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, mLocationTag);
                 startActivity(placeDetailTransferIntent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_in);
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home :
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 finish();
                 break;
         }
@@ -126,9 +129,9 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                         try {
                             JSONArray rootJsonArray = response.getJSONArray("results");
                             if (rootJsonArray.length() == 0)
-                                ((TextView)findViewById(R.id.place_list_placeholder_text_view))
+                                ((TextView) findViewById(R.id.place_list_placeholder_text_view))
                                         .setText(getResources().getString(R.string.no_near_by_tag)
-                                                + " "+ mLocationTag);
+                                                + " " + mLocationTag);
                             else {
                                 for (int i = 0; i < rootJsonArray.length(); i++) {
                                     JSONObject singlePlaceJsonObject = (JSONObject) rootJsonArray.get(i);

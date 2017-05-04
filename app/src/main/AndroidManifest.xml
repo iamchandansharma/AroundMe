@@ -3,9 +3,11 @@
           package="me.chandansharma.aroundme">
 
     <!-- App Permission of this Application -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".utils.AppController"
@@ -35,6 +37,14 @@
         <activity android:name=".ui.PlaceDetailActivity">
         </activity>
         <activity android:name=".ui.PlaceListOnMapActivity">
+        </activity>
+
+        <provider
+            android:name=".data.PlaceDetailProvider"
+            android:authorities="me.chandansharma.aroundme"
+            android:exported="false"/>
+
+        <activity android:name=".ui.FavouritePlaceListActivity">
         </activity>
     </application>
 

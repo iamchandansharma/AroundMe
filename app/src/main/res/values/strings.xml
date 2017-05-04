@@ -111,4 +111,6 @@
     <string name="call">CALL</string>
     <string name="website">WEBSITE</string>
     <string name="favourite">FAVOURITE</string>
+    <string name="place_icon">Place Icon</string>
+    <string name="share_button">Share Button</string>
 </resources>

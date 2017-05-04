@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import me.chandansharma.aroundme.R;
 import me.chandansharma.aroundme.adapter.HomeScreenItemListAdapter;
 import me.chandansharma.aroundme.utils.GoogleApiUrl;
+import me.chandansharma.aroundme.utils.PlaceDetailProvider;
 
 public class HomeScreenActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -59,10 +60,10 @@ public class HomeScreenActivity extends AppCompatActivity implements
 
         //actionBar.setNavigationIcon(R.drawable.ic_sort_white_24dp);
 
-        itemString = getResources().getStringArray(R.array.input);
+        itemString = PlaceDetailProvider.popularPlaceTagName;
         mHomeScreenItemListAdapter = new HomeScreenItemListAdapter(this, itemString);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mGridLayoutManager = new GridLayoutManager(this, 1);
+        mGridLayoutManager = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mHomeScreenItemListAdapter);
     }

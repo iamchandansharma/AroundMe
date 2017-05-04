@@ -91,7 +91,7 @@ public class PlaceUserRatingAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     mPlaceUserRatingArrayList.get(position).getPlaceRatingRelativeTimeDescription());
             mPlaceRatingRelativeTimeDescriptionTextView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
                     "Roboto-Regular.ttf"));
-            String ratingValue = String.valueOf(mPlaceUserRatingArrayList.get(position).getPlaceRating());
+            String ratingValue = String.valueOf(mPlaceUserRatingArrayList.get(position).getAuthorPlaceRating());
             mPlaceRatingBarView.setRating(Float.parseFloat(ratingValue));
             mAuthorReviewTextTextView.setText(
                     mPlaceUserRatingArrayList.get(position).getAuthorReviewText());
