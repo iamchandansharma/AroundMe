@@ -107,7 +107,6 @@ public class HomeScreenActivity extends AppCompatActivity implements
                 return false;
             }
         });
-        //actionBar.setNavigationIcon(R.drawable.ic_sort_white_24dp);
 
         itemString = PlaceDetailProvider.popularPlaceTagName;
         mHomeScreenItemListAdapter = new HomeScreenItemListAdapter(this, itemString);
@@ -183,20 +182,18 @@ public class HomeScreenActivity extends AppCompatActivity implements
 
         //Check runtime permission for Android M and high level SDK
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(HomeScreenActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(HomeScreenActivity.this,
+                if (shouldShowRequestPermissionRationale(
                         Manifest.permission.ACCESS_FINE_LOCATION)) {
-
                     new AlertDialog.Builder(HomeScreenActivity.this)
                             .setTitle(R.string.location_permission_title)
                             .setMessage(R.string.location_permission_message)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ActivityCompat.requestPermissions(HomeScreenActivity.this,
-                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    requestPermissions(new String[]{
+                                                    Manifest.permission.ACCESS_FINE_LOCATION},
                                             LOCATION_PERMISSION_CODE);
                                 }
                             })
@@ -206,9 +203,9 @@ public class HomeScreenActivity extends AppCompatActivity implements
 
                                 }
                             }).show();
-                } else ActivityCompat.requestPermissions(HomeScreenActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_PERMISSION_CODE);
+                } else
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            LOCATION_PERMISSION_CODE);
             } else
                 getGPSPermission();
         } else
@@ -232,18 +229,12 @@ public class HomeScreenActivity extends AppCompatActivity implements
                     LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLatitude())
                     + "," + String.valueOf(
                     LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude());
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mGoogleApiClient,
-                    mCurrentLocationRequest,
-                    this);
         } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient,
                     mCurrentLocationRequest,
                     this);
-            Log.e(TAG, "onConnected: location Updates");
         }
-        Log.d(TAG, "After Connected" + mCurrentLocation);
 
         mLocationSharedPreferences = getApplicationContext().getSharedPreferences(
                 GoogleApiUrl.CURRENT_LOCATION_SHARED_PREFERENCE_KEY, 0);
@@ -270,6 +261,10 @@ public class HomeScreenActivity extends AppCompatActivity implements
         //get the current location of the user
         mCurrentLocation = String.valueOf(location.getLatitude()) + "," +
                 String.valueOf(location.getLongitude());
+
+        SharedPreferences.Editor locationEditor = mLocationSharedPreferences.edit();
+        locationEditor.putString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, mCurrentLocation);
+        locationEditor.apply();
 
         Log.d(TAG, "onLocationChange");
     }
@@ -305,7 +300,10 @@ public class HomeScreenActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_LONG).show();
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        mGoogleApiClient,
+                        mCurrentLocationRequest,
+                        this);
             } else {
                 Toast.makeText(getApplicationContext(), "Please Turn on GPS", Toast.LENGTH_LONG).show();
             }
