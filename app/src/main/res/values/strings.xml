@@ -92,7 +92,6 @@
     <string name="veterinary_care">Veterinary_Care</string>
     <string name="zoo">Zoo</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_place_list_on_map">PlaceListOnMap</string>
     <string name="small_location_icon">Small Location Icon</string>
@@ -113,4 +112,18 @@
     <string name="favourite">FAVOURITE</string>
     <string name="place_icon">Place Icon</string>
     <string name="share_button">Share Button</string>
+    <string name="list_tag">List</string>
+    <string name="found">Found</string>
+    <string name="open_now">Open Now</string>
+    <string name="closed">Closed</string>
+    <string name="place_added_to_favourite_string">Place Added to Favourite List</string>
+    <string name="place_removed_to_favourite_string">Place removed from Favourite List</string>
+    <string name="username">Username</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="share">Share</string>
+    <string name="favourite_menu_item">Favourite</string>
+    <string name="menu_search">Search Place</string>
+    <string name="search_hint">Hotel, Bakery, Hair Care</string>
+    <string name="search_result_string">Search Result</string>
 </resources>

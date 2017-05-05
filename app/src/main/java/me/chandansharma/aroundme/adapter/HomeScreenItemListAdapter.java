@@ -95,6 +95,8 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
              * Intent to start Place list activity with locationTag as extra data.
              */
             Intent placeTagIntent = new Intent(mContext, PlaceListOnMapActivity.class);
+            placeTagIntent.putExtra(GoogleApiUrl.LOCATION_NAME_EXTRA_TEXT,
+                    PlaceDetailProvider.popularPlaceTagName[mItemPosition]);
             placeTagIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, locationTag);
             mContext.startActivity(placeTagIntent);
         }

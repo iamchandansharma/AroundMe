@@ -1,20 +1,30 @@
 package me.chandansharma.aroundme.ui;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +52,9 @@ public class HomeScreenActivity extends AppCompatActivity implements
     private HomeScreenItemListAdapter mHomeScreenItemListAdapter;
     private String[] itemString;
     private SharedPreferences mLocationSharedPreferences;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+    private NavigationView mNavigationView;
 
 
     @Override
@@ -54,10 +67,35 @@ public class HomeScreenActivity extends AppCompatActivity implements
 
         Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(actionBar);
-        setTitle(R.string.app_name);
-        actionBar.setTitleTextColor(ContextCompat.getColor(this,android.R.color.white));
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.draw_layout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        //set the drawerListener
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(R.string.app_name);
+        actionBar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
+
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.location_favourite_icon:
+                        startActivity(new Intent(HomeScreenActivity.this, FavouritePlaceListActivity.class));
+                        mDrawerLayout.closeDrawers();
+                        break;
+                    case R.id.share_icon:
+                        Toast.makeText(HomeScreenActivity.this, "Share Link", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawers();
+                        break;
+                }
+                return false;
+            }
+        });
         //actionBar.setNavigationIcon(R.drawable.ic_sort_white_24dp);
 
         itemString = PlaceDetailProvider.popularPlaceTagName;
@@ -66,6 +104,33 @@ public class HomeScreenActivity extends AppCompatActivity implements
         mGridLayoutManager = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mHomeScreenItemListAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate menu to add items to action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        menu.removeItem(R.id.share_icon);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+
+        searchView.setQueryHint(getString(R.string.search_hint));
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, PlaceSearchResultActivity.class)));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

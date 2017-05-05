@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,6 +45,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private String mPlaceShareUrl;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) findViewById(viewpager);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         //Method to get the all details about place
         getCurrentPlaceAllDetails(mCurrentPlaceDetailUrl);
@@ -98,6 +103,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        mProgressBar.setVisibility(View.GONE);
                         try {
                             JSONObject rootJsonObject = response.getJSONObject("result");
 
@@ -110,9 +116,13 @@ public class PlaceDetailActivity extends AppCompatActivity {
                                     .getDouble("lng");
                             String currentPlaceName = rootJsonObject.getString("name");
                             String currentPlaceOpeningHourStatus = rootJsonObject
-                                    .has("opening_hours") ? rootJsonObject
-                                    .getJSONObject("opening_hours")
+                                    .has("opening_hours") ? rootJsonObject.getJSONObject("opening_hours")
                                     .getString("open_now") : "Status Not Available";
+                            if (currentPlaceOpeningHourStatus.equals("true"))
+                                currentPlaceOpeningHourStatus = getString(R.string.open_now);
+                            else if (currentPlaceOpeningHourStatus.equals("false"))
+                                currentPlaceOpeningHourStatus = getString(R.string.closed);
+
                             Double currentPlaceRating = rootJsonObject.has("rating") ?
                                     rootJsonObject.getDouble("rating") : 0;
                             String currentPlaceAddress = rootJsonObject.has("formatted_address") ?

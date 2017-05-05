@@ -1,91 +1,91 @@
-package me.chandansharma.aroundme.ui;
+package me.chandansharma.aroundme.widget;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 
 import me.chandansharma.aroundme.R;
-import me.chandansharma.aroundme.adapter.PlaceListAdapter;
 import me.chandansharma.aroundme.data.PlaceDetailContract;
 import me.chandansharma.aroundme.data.PlaceDetailContract.PlaceDetailEntry;
 import me.chandansharma.aroundme.model.Place;
 
-public class FavouritePlaceListActivity extends AppCompatActivity {
+/**
+ * Created by iamcs on 2017-05-04.
+ */
 
-    /**
-     * ArrayList of the PlaceDetail
-     */
+public class PlaceDetailWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
+
+    private Context mContext;
     private ArrayList<Place> mFavouritePlaceArrayList = new ArrayList<>();
-    private PlaceListAdapter mPlaceListAdapter;
-    private RecyclerView mRecyclerView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place_list);
-
-        Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(actionBar);
-        setTitle("Favourite Place List");
-        actionBar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Method to required all details about place
-        //getNearByPlaceDetails(locationQueryStringUrl);
-        getPlaceListData();
-        mRecyclerView = (RecyclerView) findViewById(R.id.place_list_recycler_view);
-
-        if (mFavouritePlaceArrayList.size() == 0) {
-            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.empty_view).setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mPlaceListAdapter = new PlaceListAdapter(this, mFavouritePlaceArrayList);
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-            mRecyclerView.setAdapter(mPlaceListAdapter);
-        }
+    //Constructor
+    public PlaceDetailWidgetAdapter(Context context) {
+        mContext = context;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mFavouritePlaceArrayList.clear();
-        getPlaceListData();
-        if (mFavouritePlaceArrayList.size() == 0) {
-            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
-        } else
-            mPlaceListAdapter.notifyDataSetChanged();
+    public void onCreate() {
+        mFavouritePlaceArrayList = getFavouritePlaceListData();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onDataSetChanged() {
     }
 
-    private void getPlaceListData() {
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public int getCount() {
+        return mFavouritePlaceArrayList.size();
+    }
+
+    @Override
+    public RemoteViews getViewAt(int position) {
+
+        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(),
+                R.layout.list_item_widget);
+        remoteViews.setTextViewText(R.id.place_name, mFavouritePlaceArrayList.get(position).getPlaceName());
+        remoteViews.setTextViewText(R.id.place_open_status, mFavouritePlaceArrayList.get(position)
+                .getPlaceOpeningHourStatus());
+
+        return remoteViews;
+    }
+
+    @Override
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 1;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    private ArrayList<Place> getFavouritePlaceListData() {
 
         //Uri for requesting data from Database
         Uri placeContentUri = PlaceDetailContract.PlaceDetailEntry.CONTENT_URI;
 
         //Cursor object to get resultSet from Database
 
-        Cursor placeDetailDataCursor = getContentResolver().query(
+        Cursor placeDetailDataCursor = mContext.getContentResolver().query(
                 placeContentUri, null, null, null, null);
 
         if (placeDetailDataCursor.moveToFirst()) {
@@ -115,5 +115,6 @@ public class FavouritePlaceListActivity extends AppCompatActivity {
             } while (placeDetailDataCursor.moveToNext());
         }
         placeDetailDataCursor.close();
+        return mFavouritePlaceArrayList;
     }
 }

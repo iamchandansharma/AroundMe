@@ -44,10 +44,11 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
     private ArrayList<Place> mNearByPlaceArrayList = new ArrayList<>();
 
     private GoogleMap mGoogleMap;
-    boolean mMapReady = false;
-    String mLocationTag;
-    String mLocationQueryStringUrl;
-    MapFragment mMapFragment;
+    private boolean mMapReady = false;
+    private String mLocationTag;
+    private String mLocationName;
+    private String mLocationQueryStringUrl;
+    private MapFragment mMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,8 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
          * get the intent and get the location Tag
          */
         mLocationTag = getIntent().getStringExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT);
+        mLocationName = getIntent().getStringExtra(GoogleApiUrl.LOCATION_NAME_EXTRA_TEXT);
+
         String mCurrentLocation = getPreferences(Context.MODE_PRIVATE).getString(
                 GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
 
@@ -76,21 +79,24 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
         Toolbar actionBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(actionBar);
         String actionBarTitleText = getResources().getString(R.string.near_by_tag) +
-                " " + mLocationTag.replace('_', ' ') + " List";
+                " " + mLocationName + " " + getString(R.string.list_tag);
         setTitle(actionBarTitleText);
         actionBar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((TextView) findViewById(R.id.place_list_placeholder_text_view))
-                .setText(getResources().getString(R.string.near_by_tag) + " " + mLocationTag + " List");
+                .setText(getResources().getString(R.string.near_by_tag) + " " + mLocationName +
+                        " " + getString(R.string.list_tag));
 
         findViewById(R.id.place_list_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent placeDetailTransferIntent = new Intent(PlaceListOnMapActivity.this, FavouritePlaceListActivity.class);
-                //placeDetailTransferIntent.putParcelableArrayListExtra("Mydata", mNearByPlaceArrayList);
-                //placeDetailTransferIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, mLocationTag);
+                Intent placeDetailTransferIntent = new Intent(PlaceListOnMapActivity.this, PlaceListActivity.class);
+                placeDetailTransferIntent.putParcelableArrayListExtra(
+                        GoogleApiUrl.ALL_NEARBY_LOCATION_KEY, mNearByPlaceArrayList);
+                placeDetailTransferIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, mLocationTag);
+                placeDetailTransferIntent.putExtra(GoogleApiUrl.LOCATION_NAME_EXTRA_TEXT, mLocationName);
                 startActivity(placeDetailTransferIntent);
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_in);
             }
@@ -131,7 +137,7 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                             if (rootJsonArray.length() == 0)
                                 ((TextView) findViewById(R.id.place_list_placeholder_text_view))
                                         .setText(getResources().getString(R.string.no_near_by_tag)
-                                                + " " + mLocationTag);
+                                                + " " + mLocationName + " " + getString(R.string.found));
                             else {
                                 for (int i = 0; i < rootJsonArray.length(); i++) {
                                     JSONObject singlePlaceJsonObject = (JSONObject) rootJsonArray.get(i);
@@ -172,8 +178,8 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                                             .bearing(0)
                                             .tilt(0)
                                             .build();
-                                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+                                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
+                                            1500, null);
                                     /**
                                      *  Set the marker on Google Map
                                      */

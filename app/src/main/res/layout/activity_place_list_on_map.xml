@@ -1,65 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     tools:context="me.chandansharma.aroundme.ui.PlaceListOnMapActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@color/color_primary"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.88"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:context="me.chandansharma.aroundme.ui.PlaceListOnMapActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.12">
-
-        <View
-            android:id="@+id/place_list_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#80000000">
-        </View>
+            android:layout_height="?actionBarSize"
+            android:background="@color/color_primary"/>
 
-        <ImageView
-            android:id="@+id/place_list_icon_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:contentDescription="@string/place_list_icon"
-            android:src="@drawable/ic_toc_white"/>
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.88"/>
 
-        <TextView
-            android:id="@+id/place_list_placeholder_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@+id/place_list_icon_view"
-            android:layout_toRightOf="@+id/place_list_icon_view"
-            android:maxLines="1"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            tools:text="Near By Atm List"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.12">
 
-    </RelativeLayout>
-</LinearLayout>
+            <View
+                android:id="@+id/place_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80000000">
+            </View>
+
+            <ImageView
+                android:id="@+id/place_list_icon_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/place_list_icon"
+                android:src="@drawable/ic_toc_white"/>
+
+            <TextView
+                android:id="@+id/place_list_placeholder_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/place_list_icon_view"
+                android:layout_toRightOf="@+id/place_list_icon_view"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                tools:text="Near By Atm List"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

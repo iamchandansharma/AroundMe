@@ -52,13 +52,13 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private class PlaceListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        int mItemPosition;
         //reference of the views
         private TextView mPlaceNameTextView;
         private TextView mPlaceAddressTextView;
         private TextView mPlaceOpenStatusTextView;
         private MaterialRatingBar mPlaceRating;
         private ImageView mLocationIcon;
-        int mItemPosition;
 
         private PlaceListAdapterViewHolder(View itemView) {
             super(itemView);
@@ -82,11 +82,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mPlaceAddressTextView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
                     "Roboto-Regular.ttf"));
             if (mNearByPlaceArrayList.get(mItemPosition).getPlaceOpeningHourStatus().equals("true")) {
-                mPlaceOpenStatusTextView.setText("Open Now");
+                mPlaceOpenStatusTextView.setText(R.string.open_now);
                 mPlaceOpenStatusTextView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
                         "Roboto-Regular.ttf"));
             } else if (mNearByPlaceArrayList.get(mItemPosition).getPlaceOpeningHourStatus().equals("false")) {
-                mPlaceOpenStatusTextView.setText("Closed");
+                mPlaceOpenStatusTextView.setText(R.string.closed);
                 mPlaceOpenStatusTextView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
                         "Roboto-Regular.ttf"));
             } else {
@@ -98,7 +98,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mPlaceRating.setRating(Float.parseFloat(String.valueOf(mNearByPlaceArrayList.get(mItemPosition)
                     .getPlaceRating())));
 
-            mLocationIcon.setColorFilter(ContextCompat.getColor(mContext,R.color.color_divider));
+            mLocationIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_divider));
         }
 
         @Override

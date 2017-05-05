@@ -15,9 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
@@ -25,8 +29,6 @@ import me.chandansharma.aroundme.R;
 import me.chandansharma.aroundme.data.PlaceDetailContract.PlaceDetailEntry;
 import me.chandansharma.aroundme.model.Place;
 import me.chandansharma.aroundme.utils.GoogleApiUrl;
-
-;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -131,7 +133,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
 
                         if (mFavouriteImageIcon.getDrawable().getConstantState().equals(
                                 ContextCompat.getDrawable(getActivity(),
-                                        R.drawable.ic_favorite_border_white))) {
+                                        R.drawable.ic_favorite_border_white).getConstantState())) {
 
                             ContentValues currentPlaceDetail = new ContentValues();
 
@@ -162,7 +164,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
                                     currentPlaceDetail);
                             mFavouriteImageIcon.setImageDrawable(ContextCompat
                                     .getDrawable(getActivity(), R.drawable.ic_favorite_white));
-                            Toast.makeText(getActivity(), "Place Added to Favourite List",
+                            Toast.makeText(getActivity(), R.string.place_added_to_favourite_string,
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -177,7 +179,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
 
                             mFavouriteImageIcon.setImageDrawable(ContextCompat
                                     .getDrawable(getActivity(), R.drawable.ic_favorite_border_white));
-                            Toast.makeText(getActivity(), "Place removed from Favourite List",
+                            Toast.makeText(getActivity(), R.string.place_removed_to_favourite_string,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -198,6 +200,24 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        mMapReady = true;
+        mGoogleMap = googleMap;
+
+        CameraPosition cameraPosition = CameraPosition.builder()
+                .target(new LatLng(20.609803, 72.938786))
+                .zoom(15)
+                .bearing(0)
+                .tilt(0)
+                .build();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        PolylineOptions joinTwoPlace = new PolylineOptions();
+        joinTwoPlace.geodesic(true).add(new LatLng(20.609803, 72.938786))
+                .add(new LatLng(mCurrentPlace.getPlaceLatitude(), mCurrentPlace.getPlaceLongitude()))
+                .width(5)
+                .color(ContextCompat.getColor(getActivity(), R.color.color_primary));
+
+        mGoogleMap.addPolyline(joinTwoPlace);
     }
 
     private boolean isPlaceStoreInDatabase(String placeId) {
@@ -226,6 +246,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
                     return true;
             }
         }
+        placeDataCursor.close();
         return false;
     }
 }
