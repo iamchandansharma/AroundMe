@@ -29,10 +29,12 @@ public class GoogleApiUrl {
     /**
      * Intent data transfer key
      */
+
     public static final String LOCATION_TYPE_EXTRA_TEXT = "location_type";
     public static final String LOCATION_NAME_EXTRA_TEXT = "location_name";
     public static final String ALL_NEARBY_LOCATION_KEY = "all_nearby_location_key";
     public static final String LOCATION_ID_EXTRA_TEXT = "location_id";
     public static final String CURRENT_LOCATION_DATA_KEY = "current_location_data";
+    public static final String CURRENT_LOCATION_SHARED_PREFERENCE_KEY = "shared_preference_key";
     public static final String CURRENT_LOCATION_USER_RATING_KEY = "current_location_user_rating";
 }

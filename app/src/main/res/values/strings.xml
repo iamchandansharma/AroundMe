@@ -126,4 +126,12 @@
     <string name="menu_search">Search Place</string>
     <string name="search_hint">Hotel, Bakery, Hair Care</string>
     <string name="search_result_string">Search Result</string>
+    <string name="about_string">ABOUT</string>
+    <string name="review_string">REVIEW</string>
+    <string name="call_permission_title">Call Permission</string>
+    <string name="call_permission_message">Hi there! We can\'t call anyone without the call permission, could you please grant it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No thanks</string>
+    <string name="location_permission_title">Location Permission</string>
+    <string name="location_permission_message">Hi there! We can\'t get Near By Location without location permission, could you please grant it?</string>
 </resources>

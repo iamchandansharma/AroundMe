@@ -4,10 +4,13 @@ import android.Manifest;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,9 +32,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import me.chandansharma.aroundme.R;
 import me.chandansharma.aroundme.adapter.HomeScreenItemListAdapter;
@@ -39,10 +49,11 @@ import me.chandansharma.aroundme.utils.PlaceDetailProvider;
 
 public class HomeScreenActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, ResultCallback<LocationSettingsResult> {
 
+    public static final int LOCATION_REQUEST_CODE = 100;
+    public static final int LOCATION_PERMISSION_CODE = 101;
     private static final String TAG = HomeScreenActivity.class.getSimpleName();
-
     //View Reference Variable
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mCurrentLocationRequest;
@@ -170,6 +181,39 @@ public class HomeScreenActivity extends AppCompatActivity implements
         mCurrentLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mCurrentLocationRequest.setInterval(1000);
 
+        //Check runtime permission for Android M and high level SDK
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(HomeScreenActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(HomeScreenActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    new AlertDialog.Builder(HomeScreenActivity.this)
+                            .setTitle(R.string.location_permission_title)
+                            .setMessage(R.string.location_permission_message)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    ActivityCompat.requestPermissions(HomeScreenActivity.this,
+                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            LOCATION_PERMISSION_CODE);
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+                } else ActivityCompat.requestPermissions(HomeScreenActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_PERMISSION_CODE);
+            } else
+                getGPSPermission();
+        } else
+            getGPSPermission();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -186,9 +230,8 @@ public class HomeScreenActivity extends AppCompatActivity implements
         if (LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient) != null) {
             mCurrentLocation = String.valueOf(
                     LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLatitude())
-                    + "," +
-                    String.valueOf(
-                            LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude());
+                    + "," + String.valueOf(
+                    LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude());
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient,
                     mCurrentLocationRequest,
@@ -201,6 +244,13 @@ public class HomeScreenActivity extends AppCompatActivity implements
             Log.e(TAG, "onConnected: location Updates");
         }
         Log.d(TAG, "After Connected" + mCurrentLocation);
+
+        mLocationSharedPreferences = getApplicationContext().getSharedPreferences(
+                GoogleApiUrl.CURRENT_LOCATION_SHARED_PREFERENCE_KEY, 0);
+
+        SharedPreferences.Editor locationEditor = mLocationSharedPreferences.edit();
+        locationEditor.putString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, mCurrentLocation);
+        locationEditor.apply();
 
         Log.d(TAG, "After Connected");
     }
@@ -220,12 +270,66 @@ public class HomeScreenActivity extends AppCompatActivity implements
         //get the current location of the user
         mCurrentLocation = String.valueOf(location.getLatitude()) + "," +
                 String.valueOf(location.getLongitude());
-        mLocationSharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor locationEditor = mLocationSharedPreferences.edit();
-        locationEditor.putString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, mCurrentLocation);
-        locationEditor.apply();
 
         Log.d(TAG, "onLocationChange");
+    }
+
+    @Override
+    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+        final Status status = locationSettingsResult.getStatus();
+
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                // NO need to show the dialog;
+                break;
+
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                //  Location settings are not satisfied. Show the user a dialog
+                try {
+                    // Show the dialog by calling startResolutionForResult(), and check the result
+                    // in onActivityResult().
+                    status.startResolutionForResult(HomeScreenActivity.this, LOCATION_REQUEST_CODE);
+                } catch (IntentSender.SendIntentException e) {
+                    //failed to show
+                    e.printStackTrace();
+                }
+                break;
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                // Location settings are unavailable so not possible to show any dialog now
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please Turn on GPS", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                getGPSPermission();
+        }
+    }
+
+    private void getGPSPermission() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mCurrentLocationRequest);
+        builder.setAlwaysShow(true);
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(
+                        mGoogleApiClient,
+                        builder.build()
+                );
+        result.setResultCallback(HomeScreenActivity.this);
     }
 }
 

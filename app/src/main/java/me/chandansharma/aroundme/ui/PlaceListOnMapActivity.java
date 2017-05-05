@@ -1,6 +1,5 @@
 package me.chandansharma.aroundme.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -67,12 +66,13 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
         mLocationTag = getIntent().getStringExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT);
         mLocationName = getIntent().getStringExtra(GoogleApiUrl.LOCATION_NAME_EXTRA_TEXT);
 
-        String mCurrentLocation = getPreferences(Context.MODE_PRIVATE).getString(
-                GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
+        String currentLocation = getSharedPreferences(
+                GoogleApiUrl.CURRENT_LOCATION_SHARED_PREFERENCE_KEY, 0)
+                .getString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
 
         mLocationQueryStringUrl = GoogleApiUrl.BASE_URL + GoogleApiUrl.NEARBY_SEARCH_TAG + "/" +
                 GoogleApiUrl.JSON_FORMAT_TAG + "?" + GoogleApiUrl.LOCATION_TAG + "=" +
-                "20.609803,72.938786" + "&" + GoogleApiUrl.RADIUS_TAG + "=" +
+                currentLocation + "&" + GoogleApiUrl.RADIUS_TAG + "=" +
                 GoogleApiUrl.RADIUS_VALUE + "&" + GoogleApiUrl.PLACE_TYPE_TAG + "=" + mLocationTag +
                 "&" + GoogleApiUrl.API_KEY_TAG + "=" + GoogleApiUrl.API_KEY;
 

@@ -1,13 +1,19 @@
 package me.chandansharma.aroundme.fragment;
 
 
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +42,7 @@ import me.chandansharma.aroundme.utils.GoogleApiUrl;
 public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
 
 
+    private static final int PERMISSION_REQUEST_CODE = 100;
     /**
      * All references of the views
      */
@@ -54,7 +61,6 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
     public PlaceAboutDetail() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,22 +94,38 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mCurrentPlace.getPlacePhoneNumber().charAt(0) != '+')
-                            Toast.makeText(getActivity(), "Phone Number not Registered",
-                                    Toast.LENGTH_SHORT).show();
-                        else {
-                            Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                            phoneIntent.setData(Uri.parse("tel:" + mCurrentPlace.getPlacePhoneNumber()));
-                            try {
-                                getActivity().startActivity(phoneIntent);
-                            } catch (SecurityException se) {
 
-                            }
-                        }
+                        //Check runtime permission for Android M and high level SDK
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (getActivity().checkSelfPermission(Manifest.permission.CALL_PHONE)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                if (shouldShowRequestPermissionRationale(
+                                        Manifest.permission.CALL_PHONE)) {
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle(R.string.call_permission_title)
+                                            .setMessage(R.string.call_permission_message)
+                                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE},
+                                                            PERMISSION_REQUEST_CODE);
+                                                }
+                                            })
+                                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                }
+                                            }).show();
+                                } else
+                                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE},
+                                            PERMISSION_REQUEST_CODE);
+                            } else
+                                makeCallToPlace();
+                        } else
+                            makeCallToPlace();
                     }
-                }
-        );
-
+                });
         rootView.findViewById(R.id.location_website_container).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -119,7 +141,9 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
                     }
                 }
         );
-        if (mCurrentPlace != null) {
+        if (mCurrentPlace != null)
+
+        {
             mLocationAddressTextView.setText(mCurrentPlace.getPlaceAddress());
             mLocationPhoneTextView.setText(mCurrentPlace.getPlacePhoneNumber());
             mLocationWebsiteTextView.setText(mCurrentPlace.getPlaceWebsite());
@@ -183,8 +207,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-        );
+                });
 
         if (isPlaceStoreInDatabase(mCurrentPlace.getPlaceId())) {
             ((ImageView) rootView.findViewById(R.id.location_favourite_icon)).
@@ -193,8 +216,26 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
             ((ImageView) rootView.findViewById(R.id.location_favourite_icon)).
                     setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_favorite_border_white));
         }
-
         return rootView;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                makeCallToPlace();
+        }
+    }
+
+    private void makeCallToPlace() {
+        if (mCurrentPlace.getPlacePhoneNumber().charAt(0) != '+')
+            Toast.makeText(getActivity(), "Phone Number not Registered",
+                    Toast.LENGTH_SHORT).show();
+        else {
+            Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+            phoneIntent.setData(Uri.parse("tel:" + mCurrentPlace.getPlacePhoneNumber()));
+            getContext().startActivity(phoneIntent);
+        }
     }
 
     @Override

@@ -240,9 +240,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "ABOUT";
+                    return getString(R.string.about_string);
                 case 1:
-                    return "REVIEW";
+                    return getString(R.string.review_string);
             }
             return null;
         }

@@ -77,10 +77,14 @@ public class PlaceSearchResultActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String locationName = intent.getStringExtra(SearchManager.QUERY);
 
+            String currentLocation = getSharedPreferences(
+                    GoogleApiUrl.CURRENT_LOCATION_SHARED_PREFERENCE_KEY, 0)
+                    .getString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
+
             String locationQueryStringUrl = GoogleApiUrl.BASE_URL + GoogleApiUrl.NEARBY_SEARCH_TAG + "/" +
                     GoogleApiUrl.JSON_FORMAT_TAG + "?" + GoogleApiUrl.LOCATION_TAG + "=" +
-                    "20.609803,72.938786" + "&" + GoogleApiUrl.RANK_BY_TAG + "=" + GoogleApiUrl.DISTANCE_TAG +
-                    "&" + GoogleApiUrl.KEYWORD_TAG + "=" + locationName + "&" +
+                    currentLocation + "&" + GoogleApiUrl.RANK_BY_TAG + "=" + GoogleApiUrl.DISTANCE_TAG +
+                    "&" + GoogleApiUrl.KEYWORD_TAG + "=" + locationName.replace(" ", "%20") + "&" +
                     GoogleApiUrl.API_KEY_TAG + "=" + GoogleApiUrl.API_KEY;
             Log.d(TAG, locationQueryStringUrl);
 
