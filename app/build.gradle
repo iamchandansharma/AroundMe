@@ -11,6 +11,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file("aroundme_keystore")
+            storePassword "cs1234567890"
+            keyAlias "aroundme_key"
+            keyPassword "cs1234567890"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
