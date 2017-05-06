@@ -9,17 +9,15 @@ import android.net.Uri;
 
 public class PlaceDetailContract {
 
-    private PlaceDetailContract() {
-    }
-
     //Content Authority
     public static final String CONTENT_AUTHORITY = "me.chandansharma.aroundme";
-
     //Base Uri
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     //content path
     public static final String PATH_PLACE = "place";
+
+    private PlaceDetailContract() {
+    }
 
     public static final class PlaceDetailEntry {
 
@@ -29,7 +27,7 @@ public class PlaceDetailContract {
         //All the constant that are used to store the place details in table
         public static final String PLACE_TABLE_NAME = "place_detail";
 
-        public static final String _ID = "id";
+        public static final String _ID = "_id";
         public static final String COLUMN_PLACE_ID = "place_id";
         public static final String COLUMN_PLACE_LATITUDE = "place_latitude";
         public static final String COLUMN_PLACE_LONGITUDE = "place_longitude";

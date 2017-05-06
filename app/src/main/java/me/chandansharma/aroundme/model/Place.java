@@ -9,6 +9,18 @@ import android.os.Parcelable;
 
 public class Place implements Parcelable {
 
+    public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>() {
+
+        @Override
+        public Place createFromParcel(Parcel source) {
+            return new Place(source);
+        }
+
+        @Override
+        public Place[] newArray(int size) {
+            return new Place[size];
+        }
+    };
     /**
      * All Reference Variable
      */
@@ -79,6 +91,22 @@ public class Place implements Parcelable {
         this.mPlaceId = mPlaceId;
         this.mPlaceLatitude = mPlaceLatitude;
         this.mPlaceLongitude = mPlaceLongitude;
+    }
+
+    /**
+     * Retrieving Place data from Parcel object
+     * This constructor is invoked by the method createFromParcel(Parcel source) of
+     * the object CREATOR
+     **/
+
+    private Place(Parcel in) {
+        this.mPlaceId = in.readString();
+        this.mPlaceLatitude = in.readDouble();
+        this.mPlaceLongitude = in.readDouble();
+        this.mPlaceName = in.readString();
+        this.mPlaceOpeningHourStatus = in.readString();
+        this.mPlaceRating = in.readDouble();
+        this.mPlaceAddress = in.readString();
     }
 
     public String getPlaceId() {
@@ -166,20 +194,6 @@ public class Place implements Parcelable {
         return 0;
     }
 
-
-    public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>() {
-
-        @Override
-        public Place createFromParcel(Parcel source) {
-            return new Place(source);
-        }
-
-        @Override
-        public Place[] newArray(int size) {
-            return new Place[size];
-        }
-    };
-
     /**
      * Storing the Place data to Parcel object
      **/
@@ -194,19 +208,4 @@ public class Place implements Parcelable {
         dest.writeString(mPlaceAddress);
     }
 
-    /**
-     * Retrieving Place data from Parcel object
-     * This constructor is invoked by the method createFromParcel(Parcel source) of
-     * the object CREATOR
-     **/
-
-    private Place(Parcel in) {
-        this.mPlaceId = in.readString();
-        this.mPlaceLatitude = in.readDouble();
-        this.mPlaceLongitude = in.readDouble();
-        this.mPlaceName = in.readString();
-        this.mPlaceOpeningHourStatus = in.readString();
-        this.mPlaceRating = in.readDouble();
-        this.mPlaceAddress = in.readString();
-    }
 }

@@ -134,4 +134,9 @@
     <string name="no">No thanks</string>
     <string name="location_permission_title">Location Permission</string>
     <string name="location_permission_message">Hi there! We can\'t get Near By Location without location permission, could you please grant it?</string>
+    <string name="website_not_registered_string">Website not Registered</string>
+    <string name="phone_number_not_registered_string">Phone Number not Registered</string>
+    <string name="favourite_place_list_string">Favourite Place List</string>
+    <string name="share_link_string">Share Link</string>
+    <string name="turn_on_gps_message">Please Turn on GPS</string>
 </resources>

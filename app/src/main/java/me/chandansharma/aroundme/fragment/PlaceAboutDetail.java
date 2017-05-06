@@ -131,7 +131,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onClick(View v) {
                         if (mCurrentPlace.getPlaceWebsite().charAt(0) != 'h')
-                            Toast.makeText(getActivity(), "Website not Registered",
+                            Toast.makeText(getActivity(), R.string.website_not_registered_string,
                                     Toast.LENGTH_SHORT).show();
                         else {
                             Intent websiteUrlIntent = new Intent(Intent.ACTION_VIEW);
@@ -229,7 +229,7 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
 
     private void makeCallToPlace() {
         if (mCurrentPlace.getPlacePhoneNumber().charAt(0) != '+')
-            Toast.makeText(getActivity(), "Phone Number not Registered",
+            Toast.makeText(getActivity(), R.string.phone_number_not_registered_string,
                     Toast.LENGTH_SHORT).show();
         else {
             Intent phoneIntent = new Intent(Intent.ACTION_CALL);

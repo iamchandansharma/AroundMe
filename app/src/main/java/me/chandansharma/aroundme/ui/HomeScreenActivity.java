@@ -100,7 +100,7 @@ public class HomeScreenActivity extends AppCompatActivity implements
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.share_icon:
-                        Toast.makeText(HomeScreenActivity.this, "Share Link", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeScreenActivity.this, R.string.share_link_string, Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
                         break;
                 }
@@ -305,7 +305,7 @@ public class HomeScreenActivity extends AppCompatActivity implements
                         mCurrentLocationRequest,
                         this);
             } else {
-                Toast.makeText(getApplicationContext(), "Please Turn on GPS", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.turn_on_gps_message, Toast.LENGTH_LONG).show();
             }
         }
     }
