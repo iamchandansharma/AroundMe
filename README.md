@@ -4,7 +4,7 @@ This is an Android App which give the all NearBy Places information like ATM, Ba
 display all details of the NearBy Places and locate the NearBy Places in google map. User can easily navigate the NearBy places using 
 google map.
 
-## ScrrenShot of the Application
+## ScreenShot of the Application
 <img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/homescreen.png" width="40%" vspace="20" hspace="20"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearbyplace.png" width="40%" vspace="20" hspace="20">
 <img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearbyplacelist.png" width="40%" vspace="20" hspace="20"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearplacedetail.png" width="40%" vspace="20" hspace="20">
 <img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearbyplacereview.png" width="40%" vspace="20" hspace="20"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearbyplaceaddfavourite.png" width="40%" vspace="20" hspace="20">
