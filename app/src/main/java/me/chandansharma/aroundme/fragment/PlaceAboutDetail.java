@@ -243,9 +243,14 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
 
         mMapReady = true;
         mGoogleMap = googleMap;
+        String currentLocationString = getContext().getSharedPreferences(
+                GoogleApiUrl.CURRENT_LOCATION_SHARED_PREFERENCE_KEY, 0)
+                .getString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
+        String currentPlace[] = currentLocationString.split(",");
 
         CameraPosition cameraPosition = CameraPosition.builder()
-                .target(new LatLng(20.609803, 72.938786))
+                .target(new LatLng(Double.valueOf(currentPlace[0])
+                        , Double.valueOf(currentPlace[1])))
                 .zoom(15)
                 .bearing(0)
                 .tilt(0)
@@ -253,7 +258,8 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         PolylineOptions joinTwoPlace = new PolylineOptions();
-        joinTwoPlace.geodesic(true).add(new LatLng(20.609803, 72.938786))
+        joinTwoPlace.geodesic(true).add(new LatLng(Double.valueOf(currentPlace[0])
+                , Double.valueOf(currentPlace[1])))
                 .add(new LatLng(mCurrentPlace.getPlaceLatitude(), mCurrentPlace.getPlaceLongitude()))
                 .width(5)
                 .color(ContextCompat.getColor(getActivity(), R.color.color_primary));

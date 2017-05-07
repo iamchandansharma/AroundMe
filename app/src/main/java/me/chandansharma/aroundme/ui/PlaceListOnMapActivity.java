@@ -171,7 +171,12 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                                 }
                                 if (mMapReady) {
                                     //Set the camera position
-                                    LatLng currentLocation = new LatLng(20.609803, 72.938786);
+                                    String currentLocationString = getSharedPreferences(
+                                            GoogleApiUrl.CURRENT_LOCATION_SHARED_PREFERENCE_KEY, 0)
+                                            .getString(GoogleApiUrl.CURRENT_LOCATION_DATA_KEY, null);
+                                    String currentPlace[] = currentLocationString.split(",");
+                                    LatLng currentLocation = new LatLng(Double.valueOf(currentPlace[0])
+                                            , Double.valueOf(currentPlace[1]));
                                     CameraPosition cameraPosition = CameraPosition.builder()
                                             .target(currentLocation)
                                             .zoom(15)
