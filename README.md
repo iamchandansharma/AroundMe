@@ -16,6 +16,10 @@ google map.
  * Android Support Repository v25.2.0
  * minimum SdkVersion v16
  
+## Libraries Used
+ * Volley: https://github.com/google/volley
+ * Glide : https://github.com/bumptech/glide
+
 ## Getting Started
 This sample uses the Gradle build system. To build this project, use the "gradlew build" command or use "Import Project" in Android Studio.
 
