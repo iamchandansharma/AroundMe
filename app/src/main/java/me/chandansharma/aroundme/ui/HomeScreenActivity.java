@@ -1,6 +1,7 @@
 package me.chandansharma.aroundme.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -54,6 +56,7 @@ public class HomeScreenActivity extends AppCompatActivity implements
     public static final int LOCATION_REQUEST_CODE = 100;
     public static final int LOCATION_PERMISSION_CODE = 101;
     private static final String TAG = HomeScreenActivity.class.getSimpleName();
+
     //View Reference Variable
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mCurrentLocationRequest;
@@ -95,12 +98,34 @@ public class HomeScreenActivity extends AppCompatActivity implements
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+
                     case R.id.location_favourite_icon:
                         startActivity(new Intent(HomeScreenActivity.this, FavouritePlaceListActivity.class));
                         mDrawerLayout.closeDrawers();
                         break;
+
                     case R.id.share_icon:
-                        Toast.makeText(HomeScreenActivity.this, R.string.share_link_string, Toast.LENGTH_SHORT).show();
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey, Checkout AroundMe Application");
+                        startActivity(Intent.createChooser(shareIntent, "Share App.."));
+                        mDrawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.feedback_icon:
+                        Intent mailToIntent = new Intent(Intent.ACTION_SEND);
+                        mailToIntent.setData(Uri.parse("mailto:"));
+                        mailToIntent.setType("text/plain");
+                        mailToIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"css08740@gmail.com"});
+                        startActivity(Intent.createChooser(mailToIntent, "Send Mail.."));
+                        mDrawerLayout.closeDrawers();
+                        break;
+
+                    case R.id.about_icon:
+                        Dialog aboutDialog = new Dialog(HomeScreenActivity.this, R.style.AboutDialog);
+                        aboutDialog.setTitle(getString(R.string.about));
+                        aboutDialog.setContentView(R.layout.about_dialog);
+                        aboutDialog.show();
                         mDrawerLayout.closeDrawers();
                         break;
                 }
@@ -215,7 +240,6 @@ public class HomeScreenActivity extends AppCompatActivity implements
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,

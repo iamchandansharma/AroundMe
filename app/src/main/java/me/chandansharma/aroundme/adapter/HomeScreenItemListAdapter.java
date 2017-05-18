@@ -3,6 +3,9 @@ package me.chandansharma.aroundme.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,29 +79,42 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
 
         @Override
         public void onClick(View v) {
-            /**
+
+            if (isNetworkAvailable()) {
+                /*
              * get the tag for query parameter like Atm, Bank etc.
              */
-            String locationTag = mPlacesListTag[mItemPosition];
+                String locationTag = mPlacesListTag[mItemPosition];
 
-            if (locationTag.equals("Bus Stand"))
-                locationTag = "bus_station";
-            else if (locationTag.equals("Government Office"))
-                locationTag = "local_government_office";
-            else if (locationTag.equals("Railway Station"))
-                locationTag = "train_station";
-            else if (locationTag.equals("Hotel"))
-                locationTag = "restaurant";
-            else
-                locationTag = locationTag.replace(' ', '_').toLowerCase();
-            /**
-             * Intent to start Place list activity with locationTag as extra data.
-             */
-            Intent placeTagIntent = new Intent(mContext, PlaceListOnMapActivity.class);
-            placeTagIntent.putExtra(GoogleApiUrl.LOCATION_NAME_EXTRA_TEXT,
-                    PlaceDetailProvider.popularPlaceTagName[mItemPosition]);
-            placeTagIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, locationTag);
-            mContext.startActivity(placeTagIntent);
+                if (locationTag.equals("Bus Stand"))
+                    locationTag = "bus_station";
+                else if (locationTag.equals("Government Office"))
+                    locationTag = "local_government_office";
+                else if (locationTag.equals("Railway Station"))
+                    locationTag = "train_station";
+                else if (locationTag.equals("Hotel"))
+                    locationTag = "restaurant";
+                else
+                    locationTag = locationTag.replace(' ', '_').toLowerCase();
+                /**
+                 * Intent to start Place list activity with locationTag as extra data.
+                 */
+                Intent placeTagIntent = new Intent(mContext, PlaceListOnMapActivity.class);
+                placeTagIntent.putExtra(GoogleApiUrl.LOCATION_NAME_EXTRA_TEXT,
+                        PlaceDetailProvider.popularPlaceTagName[mItemPosition]);
+                placeTagIntent.putExtra(GoogleApiUrl.LOCATION_TYPE_EXTRA_TEXT, locationTag);
+                mContext.startActivity(placeTagIntent);
+            } else
+                Snackbar.make(mPlaceImageView, R.string.no_connection_string,
+                        Snackbar.LENGTH_SHORT).show();
+        }
+
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager = (ConnectivityManager) mContext
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
         }
     }
 }

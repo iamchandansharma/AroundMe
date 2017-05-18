@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -117,11 +120,24 @@ public class FavouritePlaceCursorAdapter extends CursorRecyclerViewAdapter {
 
         @Override
         public void onClick(View v) {
-            Intent currentLocationDetailIntent = new Intent(mContext, PlaceDetailActivity.class);
-            currentLocationDetailIntent.putExtra(GoogleApiUrl.LOCATION_ID_EXTRA_TEXT,
-                    mCurrentDataCursor.getString(
-                            mCurrentDataCursor.getColumnIndex(PlaceDetailEntry.COLUMN_PLACE_ID)));
-            mContext.startActivity(currentLocationDetailIntent);
+            if (isNetworkAvailable()) {
+                Intent currentLocationDetailIntent = new Intent(mContext, PlaceDetailActivity.class);
+                currentLocationDetailIntent.putExtra(GoogleApiUrl.LOCATION_ID_EXTRA_TEXT,
+                        mCurrentDataCursor.getString(
+                                mCurrentDataCursor.getColumnIndex(PlaceDetailEntry.COLUMN_PLACE_ID)));
+                mContext.startActivity(currentLocationDetailIntent);
+
+            } else
+                Snackbar.make(mLocationIcon, R.string.no_connection_string,
+                        Snackbar.LENGTH_SHORT).show();
+        }
+
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager = (ConnectivityManager) mContext
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
         }
     }
 }

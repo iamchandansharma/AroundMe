@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -34,7 +36,8 @@ import me.chandansharma.aroundme.model.Place;
 import me.chandansharma.aroundme.utils.AppController;
 import me.chandansharma.aroundme.utils.GoogleApiUrl;
 
-public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener {
 
     public static final String TAG = PlaceListOnMapActivity.class.getSimpleName();
     /**
@@ -194,8 +197,12 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                                         LatLng currentLatLng = new LatLng(currentLatitude, currentLongitude);
                                         mGoogleMap.addMarker(new MarkerOptions()
                                                 .position(currentLatLng)
-                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_map)));
                                     }
+
+                                    mGoogleMap.addMarker(new MarkerOptions()
+                                            .position(currentLocation)
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location)));
                                 }
                             }
                         } catch (JSONException e) {
@@ -211,5 +218,11 @@ public class PlaceListOnMapActivity extends AppCompatActivity implements OnMapRe
                 });
         //Adding request to request queue
         AppController.getInstance().addToRequestQueue(placeJsonObjectRequest, jsonArrayTag);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(this, marker.getTitle(), Toast.LENGTH_SHORT).show();
+        return false;
     }
 }

@@ -25,8 +25,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
@@ -251,11 +253,20 @@ public class PlaceAboutDetail extends Fragment implements OnMapReadyCallback {
         CameraPosition cameraPosition = CameraPosition.builder()
                 .target(new LatLng(Double.valueOf(currentPlace[0])
                         , Double.valueOf(currentPlace[1])))
-                .zoom(15)
+                .zoom(13)
                 .bearing(0)
                 .tilt(0)
                 .build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position((new LatLng(Double
+                        .valueOf(currentPlace[0]), Double.valueOf(currentPlace[1]))))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_current_location)));
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position((new LatLng(
+                        mCurrentPlace.getPlaceLatitude(), mCurrentPlace.getPlaceLongitude())))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_map)));
 
         PolylineOptions joinTwoPlace = new PolylineOptions();
         joinTwoPlace.geodesic(true).add(new LatLng(Double.valueOf(currentPlace[0])

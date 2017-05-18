@@ -139,4 +139,10 @@
     <string name="favourite_place_list_string">Favourite Place List</string>
     <string name="share_link_string">Share Link</string>
     <string name="turn_on_gps_message">Please Turn on GPS</string>
+    <string name="launcher_icon">Launcher Icon</string>
+    <string name="no_connection_string">No Internet Connection</string>
+    <string name="feedback">Feedback</string>
+    <string name="about">About</string>
+    <string name="version_text">Version 1.0</string>
+    <string name="developed_by_text">Developed By: Chandan Sharma</string>
 </resources>

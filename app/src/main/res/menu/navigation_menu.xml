@@ -15,4 +15,15 @@
         android:title="@string/share"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/feedback_icon"
+        android:icon="@drawable/ic_feedback_white"
+        android:title="@string/feedback"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/about_icon"
+        android:icon="@drawable/ic_info_white"
+        android:title="@string/about"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -76,6 +76,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        menu.removeItem(R.id.search);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -136,7 +137,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                                     rootJsonObject.getString("website") :
                                     "Website Not Registered";
                             String currentPlaceShareLink = rootJsonObject.getString("url");
-                            mPlaceShareUrl = currentPlaceDetailUrl;
+                            mPlaceShareUrl = currentPlaceShareLink;
 
                             Place currentPlaceDetail = new Place(
                                     currentPlaceId,
