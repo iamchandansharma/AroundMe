@@ -81,7 +81,7 @@ public class PlaceDetailProvider {
             R.drawable.ic_post_office,
             R.drawable.ic_restaurant,
             R.drawable.ic_school,
-            R.drawable.ic_shopping_mall,
+            R.drawable.ic_clothing_store,
             R.drawable.ic_store,
             R.drawable.ic_taxi_stand,
             R.drawable.ic_train_station,
@@ -122,5 +122,17 @@ public class PlaceDetailProvider {
             "Storage",
             "Subway Station",
             "Travel Agency"
+    };
+
+    public static int[] accentColor = {
+            R.color.accent_red,
+            R.color.accent_pink,
+            R.color.accent_purple,
+            R.color.accent_indago,
+            R.color.accent_blue,
+            R.color.accent_teal,
+            R.color.accent_green,
+            R.color.accent_amber,
+            R.color.accent_brown
     };
 }

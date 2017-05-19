@@ -3,6 +3,7 @@ package me.chandansharma.aroundme.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Random;
 
 import me.chandansharma.aroundme.R;
 import me.chandansharma.aroundme.ui.PlaceListOnMapActivity;
@@ -73,6 +76,12 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
 
             mPlaceTextView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
                     "Roboto-Regular.ttf"));
+            int[] colorArray = PlaceDetailProvider.accentColor;
+
+            int randomColor = colorArray[new Random().nextInt(colorArray.length)];
+
+            ((GradientDrawable) mPlaceImageView.getBackground())
+                    .setColor(ContextCompat.getColor(mContext, randomColor));
 
             mItemPosition = position;
         }
@@ -94,6 +103,8 @@ public class HomeScreenItemListAdapter extends RecyclerView.Adapter<RecyclerView
                     locationTag = "train_station";
                 else if (locationTag.equals("Hotel"))
                     locationTag = "restaurant";
+                else if (locationTag.equals("Police Station"))
+                    locationTag = "police";
                 else
                     locationTag = locationTag.replace(' ', '_').toLowerCase();
                 /**
