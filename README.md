@@ -5,10 +5,10 @@ display all details of the NearBy Places and locate the NearBy Places in google 
 google map.
 
 ## ScreenShot of the Application
-<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_1.png" width="35%" vspace="10" hspace="10"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_2.png" width="35%" vspace="10" hspace="10">
-<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_3.png" width="35%" vspace="10" hspace="10"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_4.png" width="35%" vspace="10" hspace="10">
-<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_5.png" width="35%" vspace="10" hspace="10"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_6.png" width="35%" vspace="10" hspace="10">
-<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_7.png" width="35%" vspace="10" hspace="10">
+<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_1.png" width="35%" vspace="15" hspace="15"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_2.png" width="35%" vspace="15" hspace="15">
+<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/screenshot_3.png" width="35%" vspace="15" hspace="15"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearplacedetail.png" width="40%" vspace="20" hspace="20">
+<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearbyplacereview.png" width="40%" vspace="20" hspace="20"><img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/nearbyplaceaddfavourite.png" width="40%" vspace="20" hspace="20">
+<img src="https://github.com/CSS08/AroundMe/blob/master/App%20Arts/favouriteplacelist.png" width="40%" vspace="20" hspace="20">
 
 ## Pre-requisites
  * Android SDK v25
